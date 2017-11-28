@@ -40,6 +40,18 @@
      rpm -Uvh pcs-0.9.158-6.el7.centos.x86_64.rpm
   ```
 
++ 추가 설치 필요 할 수도 있음
+
+```sh
+  rpm -Uvh libyaml-0.1.4-11.el7_0.x86_64.rpm
+  rpm -Uvh ruby-irb-2.0.0.648-30.el7.noarch.rpm
+  rpm -Uvh rubygem-io-console-0.4.2-30.el7.x86_64.rpm
+  rpm -Uvh rubygem-psych-2.0.0-30.el7.x86_64.rpm
+  rpm -Uvh rubygem-rdoc-4.0.0-30.el7.noarch.rpm
+  rpm -Uvh rubygems-2.0.14.1-30.el7.noarch.rpm
+```
+
+  ​
 
   ## 2. selinux, 방화벽 설정
 
@@ -221,13 +233,13 @@
 
 + standby 상태로 변경
 
-```
+```sh
 pcs cluster standby mf1
 ```
 
 + standby 상태에서 복구
 
-```
+```sh
 pcs cluster unstandby mf2
 ```
 
