@@ -1,151 +1,223 @@
-## 3. 텍스트 요소 단위의 분석
-
-### 3-1 텍스트 표현의 단위
-
-+ 어휘(Lexical) 표현
-  + 문자 (문자기반 n-gram, 순서열)
-  + 단어 (불용어, 어간 추출, 원형 복원)
-  + 구 (단어 기반 n-gram, proximity features)
-  + 품사 태그 (Part-of-speech(POS) tags)
-+ 구문(Syntactic) 표현
-  + 벡터-공간모델 (Vector-Space Model) : 비정형 텍스트를 벡터로 바꿔줌
-  + 언어 모델 (Language Models) : 단어 분포도
-  + 전체 구문분석 (Full-parsing) : 문장을 구조화(주어, 동사 등)
-+ 의미론적(Semantic) 표현
-  + Collaborative tagging / Web2.0 : 일반적인 사람들의 집합지능을 이용
-  + Template / Frames : 언어 전문가들의 수작업
-  + Ontologies / First order theories
-
-### 3-2 Character 단위 분석
-
-텍스트 분석의 첫 번째 단위
-
-문자는 글자와 구분 기호로 나누어짐
-
-+ 문자 단위의 텍스트 분석의 대표적인 예
-  + 문자 기반 언어 모델(Language model)
-    + 통계 기반 기법으로 확률분포를 이용해서 m개의 단어를 문자 순열로 표현하고 이에 확률을 부여하는 기법
-  + 서픽스 배열 (Suffix array)
-    + 일련의 문자열의 접미사를 사전식 순서대로 나열한 배열
-    + 문자열 검색이나 전문 검사 정보검색에서 색인 작업이나 텍스트 마이닝의 전처리 과정 등에서 쓰임
-
-### 3-3 단어 단위 분석
-
-+ 단어의 특징
-
-  + Homonymy : 동일한 형식 + 다른 의미
-
-    Ex) 말(言) - 말(馬)
-
-  + Polysemy : 동일한 형식 + 관련 있는 의미
-
-    Ex) 다리(책상) - 다리(지게)
-
-  + Synonymy : 다른 형식 + 동일한 의미
-
-    Ex) 가수 - 보컬
-
-  + Hyponymy : 상하 관계
-
-    Ex) 식사 - 아침 식사
-
-+ 품사 태깅, 개채명 인식, 철자 교정 등
-
-  + 단어 단위의 텍스트 분석은 가장 보편적인 방법으로 여겨져 왔고, 수많은 기법들이 단어를 기반으로 해서 고안됨
-
-+ 서양 언어는 단어 단위로 분석하기 적합함
-
-  + 한국어는 의미 단위의 다른 개념을 가짐
-
-+ Tokenization
-
-  + 문헌 단위의 문자열이 주어졌을 때 token들로 분자열을 조각 내는 작업
-
-  + 구두점 등 불필요한 글자들을 제외하기도 함
-
-  + 영어는 단어에 조사가 붙지 않아 한글보다 tokenization이 쉬움
-
-```
-input : Friends, Romans, Coutrymen, lend me your ears;
-output : Friends Romans Coutrymen lend me your ears
-```
-
-+ 용어 정의
-
-  + Word
-    + 구분된 문자열
-  + Term
-    + Nomalized 된 단어(대소문자, 형태, 철자 등)
-    + Word와 동일하게 쓰이기도 함
-  + Token
-    + 유용한 의미적 단위로 함꼐 모여지는 일련의 문자열
-    + 구분 기호 사이의 글자 시퀀스
-  + Type
-    + 같은 문자열을 포함하고 있는 모든 token들을 표현하는 클래스
-
-+ 불용어 (Stop word)
-
-  + 정보를 전달하지 않는 단어
-
-  + 기능적인 역할을 함
-
-  + 텍스트 분석을 할 때 더 나은 결과를 내기 위해 불용어를 삭제함
-
-  + 영어 : the, a, in, about ...
-
-  + 한국어 : 있, 않, 없, ...
-
-    John saw ***the*** pencil.
-
-+ 품사 태깅 (POS tagging)
-
-  + 문장에서 각각의 단어를 해당하는 품사로 레이블링하는 작업
-
-  + 하나의 단어가 여러 품사를 갖는 모호성을 가질 수 있으며 이러한 품사의 모호성을 해서하는 과정 (Kroeger, 2005)
-
-  + 문장에 사용된 형태소들의 품사를 파악하고 문장의 구조도 파악할 수 있음
-
-  + 규칙 기반 기법
-
-    + 사전을 사용해서 각각의 단어에 그 단어가 가질 수 있는 품사 리스트를 부여
-    + 수작업으로 만든 대량의 규칙을 이용해서 품사의 리스트에서 해당 단어에 맞는 하나의 품사를 선택
-
-  + Stochastic 기법
-
-    + 각각의 단어의 품사 결정을 해당 단어의 학습 데이터에서 가장 일반적인 품사로 함
-
-    + 히든 마르코프 모델 (Hidden Markov Model : HMM)
-
-      : 모든 가능한 태그 순열 중에서 문헌집단 내에 주어진 단어들의 순열 (observation sequence) 에서 가장 가능성이 있는 태그열을 찾음
-
-### 3-4 Zipf's 법칙
-
-+ 어떠한 자연어 말뭉치 표현에 나타나는 단어들을 그 사용 빈도가 높은 순서대로 정렬한다면, 모든 단어들의 사용 빈도는 해당 단어의 순위에 반비례함
-+ 가장 사용 빈도가 높은 단어는 두 번째 단어보다 빈도가 약 두 배 높으며, 세 번째 단어보다는 빈도가 세 배 높음
-+ Zipf's 법칙은 어느 문헌집단에서나 나타남
-  + '브라운대학교 현대 미국 영어 표준 말뭉치'의 경우, 가장 사용 빈도가 높은 단어는 영어 정관사 'the'이며 전 문서에서 7%의 빈도(약 100만개 남짓의 전체 사용 단어 중 69, 791회)를 차지함
-+ N개의 요소들 가운데 순위가 k번째인 요소의 사용 빈도
-  + ![https://wikimedia.org/api/rest_v1/media/math/render/svg/ea880e03cc60910f7fd5775d90362d365cabc65c](https://wikimedia.org/api/rest_v1/media/math/render/svg/ea880e03cc60910f7fd5775d90362d365cabc65c)
-  + N : 요소의 숫자
-  + k : 요소의 순위
-  + s : 분포의 특성을 나타내는 지수값 
-
-### 3-5 구 단위 분석
-
-+ 텍스트 단위화 (Text Chunking)
-  + 텍스트를 어휘적으로 상호 관련 있는 단어들로 나누는 자연어 처리의 한 기법 (Ramshaw and Marcus, 1999)
-  + 명사구는 동사의 주체나 객체가 될 수 있는 요소임
-  + 동사구는 조동사, 동사 수식어들을 포함하는 요소임
-  + 텍스트 표현 방법
-    + 트리 구조 : 각각의 단어에 품사 태깅을 하고 그것을 바탕으로 텍스트를 단위화함
-    + 태그 : IOB 또는 BOI 방식
-+ N-gram
-  + 주어진 텍스트나 음성의 연속된 일련의 열
-  + N은 사용한 term의 개수를 기준으로 함
-    + Uni-gram : 1 term
-    + Bi-gram : 2 terms
-    + Tri-gram : 3 terms
-  + N-gram은 언어 모델링에 쓰일 때 적합
-
-### 3-6 단어 단위 분석 실습
-### 3-7 구 단위 분석 실습
++# CentOS7에서 corosync와 pacemaker를 이용하여 이중화
+ +
+ +## 0. 설치 전 확인사항
+ +
+ ++ 각 노드의 IP주소를 /etc/hosts 파일에 등록 해준다
+ +
+ +  ```
+ +  cat /etc/hosts
+ +  192.168.1.21  mf1
+ +  192.168.1.22  mf2
+ +  192.168.1.20  mf
+ +  ```
+ +
+ +## 1. 설치
+ +
+ ++ yum으로 설치
+ +```sh
+ +    yum install -y pacemaker corosync pcs psmisc policycoreutils-python
+ +```
+ +
+ ++ 수동 설치
+ + ```sh
+ +    rpm -Uvh cifs-utils-6.2-10.el7.x86_64.rpm 
+ +    rpm -Uvh clufter-common-0.76.0-1.el7
+ +    rpm -Uvh clufter-bin-0.76.0-1.el7.x86_64.rpm
+ +    rpm -Uvh libqb-1.0.1-5.el7.x86_64.rpm
+ +    rpm -Uvh resource-agents-3.9.5-105.el7_4.2.x86_64.rpm
+ +    rpm -Uvh python-clufter-0.76.0-1.el7
+ +    rpm -Uvh psmisc-22.20-11.el7
+ +    rpm -Uvh --nodeps libsemanage-2.5-8.el7.x86_64.rpm
+ +    rpm -Uvh libsemanage-python-2.5-8.el7.x86_64.rpm
+ +    rpm -Uvh --nodeps policycoreutils-python-2.5-17.1.el7.x86_64.rpm
+ +    rpm -Uvh policycoreutils-2.5-17.1.el7.x86_64.rpm
+ +    rpm -Uvh --nodeps corosynclib-2.4.0-9.el7_4.2.x86_64.rpm
+ +    rpm -Uvh corosync-2.4.0-9.el7_4.2.x86_64.rpm
+ +    rpm -Uvh pacemaker-libs-1.1.16-12.el7_4.4.x86_64.rpm
+ +    rpm -Uvh pacemaker-cli-1.1.16-12.el7_4.4.x86_64.rpm
+ +    rpm -Uvh pacemaker-cluster-libs-1.1.16-12.el7_4.4.x86_64.rpm 
+ +    rpm -Uvh pacemaker-1.1.16-12.el7_4.4.x86_64.rpm
+ +    rpm -Uvh pcs-0.9.158-6.el7.centos.x86_64.rpm
+ + ```
+ +
+ +
+ + ## 2. selinux, 방화벽 설정
+ +
+ ++ 방화벽 설정
+ +```sh
+ +    firewall-cmd --permanent --zone=public --add-port=2224/tcp
+ +    firewall-cmd --permanent --zone=public --add-port=3121/tcp
+ +    firewall-cmd --permanent --zone=public --add-port=21064/tcp
+ +    firewall-cmd --permanent --zone=public --add-port=5405/udp
+ +    firewall-cmd --reload
+ +```
+ ++ selinux 해제
+ +  + selinux 상태 확인
+ +    ```sh
+ +      sestatus
+ +    ```
+ +
+ +  + selinux 해제
+ +
+ +    ```sh
+ +    sentenforce 0
+ +    ```
+ +  + selinux 영구 해제
+ +    ```sh
+ +    vi /etc/sysconfig/selinux
+ +    SELINUX=enforcing -> SELINUX=disabled 로 변경
+ +    ```
+ +
+ +
+ +
+ +## 3. 설정 
+ +
+ ++ 데몬 실행 및 서비스 추가
+ +
+ +  + 데몬 실행(모든 노드 실행)
+ +
+ +    ```sh
+ +    systemctl start pcsd.service
+ +    ```
+ +
+ +  + 서비스 추가(모든 노드 실행)
+ +
+ +    ```sh
+ +    systemctl enable pcsd.service
+ +    systemctl enable corosync.service
+ +    systemctl enable pacemaker.service
+ +    ```
+ +
+ ++  hacluster 계정 패스워드 설정 (모든 노드를 동일하게 설정)
+ +
+ +  ```sh
+ +  passwd hacluster
+ +  ```
+ +
+ ++ cornsync 설정
+ +
+ +  + hacluster 사용자 인증(한쪽 노드)
+ +
+ +    ```sh
+ +    pcs cluster auth mf1 mf2
+ +    ```
+ +
+ +  + corosync 구성(한쪽 노드)
+ +
+ +    ```sh
+ +    pcs cluster setup --name mf_cluseter mf1 mf2
+ +    ```
+ +
+ +
+ +
+ +## 4. cluster 실행과 상태 확인 
+ +
+ ++ 클러스터 실행
+ +
+ +  ```sh
+ +  pcs cluster start -all
+ +  ```
+ +
+ +  결과
+ +
+ +  ```
+ +  mf1: Starting Cluster...
+ +  mf2: Starting Cluster...
+ +  ```
+ +
+ ++ 클러스터 통신 확인
+ +
+ +  ```sh
+ +  corosync-cfgtool -s
+ +  ```
+ +
+ +  결과
+ +
+ +  ```
+ +  Printing ring status.
+ +  Local node ID 1
+ +  RING ID 0
+ +  	id	= 192.168.1.21
+ +  	status	= ring 0 active with no faults
+ +  ```
+ +
+ ++ 멤버쉽과 쿼럼 확인
+ +
+ +  ```sh
+ +  corosync-cmapctl |egrep -i members
+ +  ```
+ +
+ +  ``` sh
+ +  pcs status corosync
+ +  ```
+ +
+ +  ```sh
+ +  pcs status
+ +  ```
+ +
+ +
+ +
+ +## 5. Active/Passive 클러스터 생성
+ +
+ ++ 유효성 확인 
+ +
+ +  데이터의 무결성 확보를 위해 기본적으로 STONITH가 활성되어 있으나 비활성화 후 확인
+ +
+ +  ```sh
+ +  pcs property set stonith-enabled=false
+ +  crm_verify -L
+ +  ```
+ +
+ ++ 가상 IP리소스 생성
+ +
+ +  ```sh
+ +  pcs resource create VirtualIP ocf:heartbeat:IPaddr2 ip='사용할 가상 IP' cidr_netmask=24 op monitor interval=30s
+ +  ```
+ +
+ +
+ +
+ +## X. constraint location 설정
+ +
+ ++ location 추가
+ +
+ +  숫자가 낮을 수록 우선순위 높음(?)
+ +
+ +  ```sh
+ +  pcs constraint location VirtualIP prefers mf1=50
+ +  pcs constraint location VirtualIP prefers mf2=100
+ +  ```
+ +
+ ++ location 삭제
+ +
+ +  + id 확인
+ +
+ +    ```
+ +    pcs constraint --full
+ +    ```
+ +
+ +    결과
+ +
+ +    ```
+ +    Location Constraints:
+ +      Resource: VirtualIP
+ +        Enabled on: mf2 (score:100) (id:location-VirtualIP-mf2-100)
+ +        Enabled on: mf1 (score:50) (id:location-VirtualIP-mf1-50)
+ +    Ordering Constraints:
+ +    Colocation Constraints:
+ +    Ticket Constraints:
+ +    ```
+ +
+ +  + 삭제
+ +
+ +    ```sh
+ +    pcs constraint remove `삭제 할 constraint id`
+ +    ex)location-VirtualIP-mf2-100
+ +    ```
+ +
+ +
+ +
+ +
+ +### 출처 
+ +
+ +* [리눅스 HA(corosync, pacemaker) – Part 1](https://blog.boxcorea.com/wp/archives/1784)
+ +
