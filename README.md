@@ -246,3 +246,4 @@ pcs cluster unstandby mf2
  ### 출처 
 
  * [리눅스 HA(corosync, pacemaker) – Part 1](https://blog.boxcorea.com/wp/archives/1784)
+ * [PCS를 이용한 HA구성](https://yoanp.github.io/2017/03/04/pcs-ha-setting)
