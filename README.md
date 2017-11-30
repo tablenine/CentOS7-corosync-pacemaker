@@ -192,7 +192,7 @@
 
  + location 추가
 
-   숫자가 낮을 수록 우선순위 높음(?)
+   숫자가 높을 수록 우선순위 높음
 
    ```sh
    pcs constraint location VirtualIP prefers mf1=50
