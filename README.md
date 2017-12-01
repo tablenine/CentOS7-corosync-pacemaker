@@ -234,13 +234,13 @@
 + standby 상태로 변경
 
 ```sh
-pcs cluster standby mf1
+pcs cluster standby mf2
 ```
 
 + standby 상태에서 복구
 
 ```sh
-pcs cluster unstandby mf1
+pcs cluster unstandby mf2
 ```
 
  ### 출처 
