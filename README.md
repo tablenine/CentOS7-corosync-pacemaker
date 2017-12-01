@@ -240,7 +240,7 @@ pcs cluster standby mf1
 + standby 상태에서 복구
 
 ```sh
-pcs cluster unstandby mf2
+pcs cluster unstandby mf1
 ```
 
  ### 출처 
